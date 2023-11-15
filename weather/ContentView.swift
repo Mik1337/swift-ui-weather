@@ -15,7 +15,7 @@ struct ContentView: View {
     var body: some View {
         
         ZStack{
-            BackgroundView(isDark: $isDark)
+            BackgroundView(isDark: isDark)
             
             VStack {
                 CityNameView(cityName: "Bangalore, IN")
@@ -43,8 +43,9 @@ struct ContentView: View {
                 } label: {
                     ButtonView(
                         title: isDark ? "light mode" : "dark mode",
-                        textColor: isDark ? .white : .white,
-                        backgroundColor: isDark ? .black : .blue)
+                        textColor: .blue,
+                        backgroundColor: .white
+                    )
                 }
                 
                 Spacer()
@@ -84,15 +85,12 @@ struct WeatherDayView: View {
 
 struct BackgroundView: View {
     
-    @Binding var isDark: Bool
+    var isDark: Bool
     
     var body: some View {
-        LinearGradient(
-            gradient: Gradient(
-                colors: [isDark ? .black : .blue, isDark ? .gray : .teal]),
-                startPoint: .topLeading,
-                endPoint: .bottomLeading
-        )
+        ContainerRelativeShape()
+            .fill(isDark ? Color.black.gradient : Color.blue.gradient)
+            .ignoresSafeArea()
     }
 }
 
@@ -112,14 +110,16 @@ struct MainWeatherView: View {
     
     var body: some View {
         Image(systemName: imageName)
-            .renderingMode(.original)
+            .symbolRenderingMode(.multicolor)
             .resizable()
             .aspectRatio(contentMode: .fit)
             .symbolEffect(.pulse, isActive: false)
             .frame(width: 180, height:180)
         
         
-        Text("\(temp)°C").font(.system(size: 70, weight: .medium)).foregroundColor(.white)
+        Text("\(temp)°C")
+            .font(.system(size: 70, weight: .medium))
+            .foregroundColor(.white)
             .padding(20)
     }
 }
